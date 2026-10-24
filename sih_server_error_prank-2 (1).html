@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIH Result</title>
+<style>
+  :root { color-scheme: light; --navy:#102a43; --blue:#1769aa; --muted:#62758a; }
+  * { box-sizing: border-box; }
+  body {
+    margin:0; min-height:100vh; display:flex; flex-direction:column;
+    font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    color:#243b53; background:#f3f6fa;
+  }
+  header {
+    background:#fff; border-bottom:1px solid #d9e2ec;
+    padding:18px clamp(18px,5vw,64px); display:flex; align-items:center; gap:14px;
+  }
+  .emblem {
+    width:44px;height:44px;border-radius:12px;background:#e7f1fb;color:#1769aa;
+    display:grid;place-items:center;font-weight:800;letter-spacing:-1px;
+  }
+  .brand { font-weight:750; color:var(--navy); font-size:17px; }
+  .subbrand { font-size:12px; color:var(--muted); margin-top:3px; }
+  main { width:min(760px, calc(100% - 32px)); margin: clamp(38px,8vh,84px) auto 50px; }
+  .panel {
+    background:#fff; border:1px solid #d9e2ec; border-radius:18px;
+    padding:clamp(24px,5vw,48px); box-shadow:0 12px 36px rgba(16,42,67,.07);
+  }
+  .status { display:inline-flex; align-items:center; gap:8px; border-radius:999px;
+    padding:7px 12px; background:#fff4e5; color:#9c5700; font-size:12px; font-weight:750; }
+  .dot { width:8px;height:8px;border-radius:50%;background:#d97706; animation:pulse 1.4s infinite; }
+  h1 { margin:22px 0 12px; color:var(--navy); font-size:clamp(28px,5vw,42px); line-height:1.12; letter-spacing:-1.2px; }
+  p { color:#52667a; line-height:1.7; font-size:15px; }
+  .code { margin:24px 0; padding:16px 18px; border-radius:10px; background:#f5f8fb;
+    border:1px solid #e1e8ef; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .code strong { color:var(--navy); font-size:14px; }
+  .code span { font:12px ui-monospace, SFMono-Regular, Menlo, monospace; color:#62758a; }
+  .progress { height:6px; background:#e8eef5; border-radius:99px; overflow:hidden; margin-top:24px; }
+  .progress span { display:block; height:100%; width:35%; background:#1769aa; border-radius:99px; animation:move 2.6s ease-in-out infinite; }
+  .retry { display:flex; align-items:center; gap:10px; margin-top:20px; font-size:13px; color:#62758a; }
+  .spinner { width:16px;height:16px;border:2px solid #d8e5f2;border-top-color:#1769aa;border-radius:50%;animation:spin 1s linear infinite; }
+  .actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:28px; }
+  button { border:0;border-radius:9px;padding:12px 18px;font-weight:700;cursor:pointer;font-size:14px; }
+  .primary { background:#1769aa;color:white; }
+  .secondary { background:#edf2f7;color:#334e68; }
+  .fineprint { margin-top:18px; font-size:12px; color:#8293a5; }
+  footer { margin-top:auto; text-align:center; padding:22px 16px; color:#8293a5; font-size:12px; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  @keyframes move { 0%{transform:translateX(-110%)} 100%{transform:translateX(320%)} }
+  @keyframes pulse { 50%{opacity:.35} }
+  @media (prefers-reduced-motion: reduce) { *,*::before,*::after { animation:none!important; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="emblem" aria-hidden="true">SIH</div>
+  <div>
+    <div class="brand">SIH Result</div>
+  </div>
+</header>
+<main>
+  <section class="panel">
+    <div class="status"><span class="dot"></span> TEMPORARY SERVICE ISSUE</div>
+    <h1>We're experiencing unusually high traffic.</h1>
+    <p>
+      The results portal is receiving more requests than it can currently process.
+      Please wait a moment and try again. Your patience is appreciated.
+    </p>
+    <div class="code">
+      <strong>Service temporarily unavailable</strong>
+      <span>HTTP 503 · RETRY LATER</span>
+    </div>
+    <p>Our systems are attempting to recover. Please avoid refreshing repeatedly.</p>
+    <div class="progress" aria-label="Simulated loading progress"><span></span></div>
+    <div class="retry"><span class="spinner"></span><span id="retryText">Retry available in 30 seconds…</span></div>
+    <div class="actions">
+      <button class="primary" id="retryButton">Try again</button>
+      <button class="secondary" id="statusButton">Check status</button>
+    </div>
+    <div class="fineprint">Unofficial page · No official result announcement is being made.</div>
+  </section>
+</main>
+<footer>SIH Result</footer>
+<script>
+  let seconds = 30;
+  const retryText = document.getElementById('retryText');
+  const retryButton = document.getElementById('retryButton');
+  function tick() {
+    if (seconds > 0) {
+      retryText.textContent = `Retry available in ${seconds} seconds…`;
+      seconds--;
+    } else {
+      retryText.textContent = 'The service is still busy. Please try again later.';
+      seconds = 30;
+    }
+  }
+  tick();
+  setInterval(tick, 1000);
+  retryButton.addEventListener('click', () => {
+    seconds = 30;
+    retryText.textContent = 'Retrying connection… service is still busy.';
+  });
+  document.getElementById('statusButton').addEventListener('click', () => {
+    retryText.textContent = 'Status check complete: service temporarily unavailable.';
+  });
+</script>
+</body>
+</html>
